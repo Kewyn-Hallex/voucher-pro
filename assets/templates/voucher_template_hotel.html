@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <title>Voucher Hotel Porto da Lua</title>
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 16px;
             background: #fff;
@@ -14,18 +17,22 @@
             font-size: 14px;
             line-height: 1.2;
         }
+
         .voucher-container {
             width: 746px;
             border: 1px solid #000;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
+            margin-top: 5rem;
         }
+
         .voucher-row {
             display: flex;
             width: 100%;
             border-bottom: 1px solid #000;
         }
+
         .voucher-cell {
             border-right: 1px solid #000;
             padding: 8px;
@@ -33,7 +40,11 @@
             align-items: center;
             justify-content: center;
         }
-        .voucher-cell:last-child { border-right: none; }
+
+        .voucher-cell:last-child {
+            border-right: none;
+        }
+
         /* Header */
         .header {
             display: flex;
@@ -41,12 +52,14 @@
             height: 106px;
             border-bottom: 1px solid #000;
         }
+
         .header-logo {
             width: 146px;
             text-align: center;
             position: relative;
             border-right: 1px solid #000;
         }
+
         .header-logo-placeholder {
             width: 100px;
             height: 90px;
@@ -56,6 +69,7 @@
             justify-content: center;
             font-size: 12px;
         }
+
         .header-logo img {
             position: absolute;
             top: 8px;
@@ -66,6 +80,7 @@
             object-fit: contain;
             opacity: 1;
         }
+
         .header-info {
             flex: 1;
             text-align: center;
@@ -74,10 +89,21 @@
             flex-direction: column;
             justify-content: center;
         }
-        .hotel-name { font-weight: 800; text-transform: uppercase; font-size: 20px; margin: 0; }
-        .hotel-address { font-size: 14px; margin-top: 6px; }
+
+        .hotel-name {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .hotel-address {
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
         /* Título do voucher */
-        .voucher-title { 
+        .voucher-title {
             height: 50px;
             text-align: center;
             font-weight: 800;
@@ -86,6 +112,7 @@
             padding-top: 6px;
             border-bottom: 1px solid #000;
         }
+
         /* Check-in / Check-out */
         .main-info {
             display: flex;
@@ -93,6 +120,7 @@
             height: 60px;
             border-bottom: 1px solid #000;
         }
+
         .main-info .label-cell {
             width: 146px;
             font-weight: 700;
@@ -102,7 +130,8 @@
             justify-content: center;
             border-right: 1px solid #000;
         }
-        .main-info .label-cell1{
+
+        .main-info .label-cell1 {
             width: 130px;
             font-weight: 700;
             text-transform: uppercase;
@@ -111,11 +140,13 @@
             justify-content: center;
             border-right: 1px solid #000;
         }
+
         .main-info .info-cell {
             flex: 1;
             display: flex;
             padding: 0;
         }
+
         .split-left {
             border-right: 1px solid #000;
             flex: 1;
@@ -124,11 +155,13 @@
             justify-content: center;
             padding: 9px;
         }
+
         .split-right {
             flex: 2;
             display: grid;
             grid-template-columns: 250px 1fr;
         }
+
         .col-2-label {
             font-weight: 700;
             text-transform: uppercase;
@@ -136,12 +169,14 @@
             align-items: center;
             padding-left: 9px;
         }
+
         .value-cell {
             display: flex;
             align-items: center;
             padding-left: 12px;
             white-space: nowrap;
         }
+
         /* Hóspedes */
         .hospedes {
             display: flex;
@@ -149,7 +184,13 @@
             height: 4.5rem;
             padding: 4px 8px;
         }
-        .hospedes .label-cell { font-weight: 700; text-transform: uppercase; margin-right: 12px; }
+
+        .hospedes .label-cell {
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-right: 12px;
+        }
+
         /* Pagamento */
         .payment-title {
             height: 32px;
@@ -160,30 +201,65 @@
             border-top: 1px solid #000;
             border-bottom: 1px solid #000;
         }
+
         .payment-section {
             display: flex;
             width: 100%;
         }
+
         .policy-cell {
             width: 50%;
             padding: 10px 14px 12px 14px;
         }
-        .policy-cell strong { display: inline-block; margin-bottom: 6px; }
-        .policy-cell ul { margin: 8px 0 0 0; padding-left: 18px; }
-        .policy-cell li { margin: 7px 0; }
+
+        .policy-cell strong {
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .policy-cell ul {
+            margin: 8px 0 0 0;
+            padding-left: 18px;
+        }
+
+        .policy-cell li {
+            margin: 7px 0;
+        }
+
         .values-table {
             width: 50%;
             border-collapse: collapse;
         }
+
         .values-table-row {
             display: flex;
             border-bottom: 1px solid #000;
             border-left: 1px solid #000;
             height: 36px;
         }
-        .val-label { flex: 2; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; padding-left: 12px; }
-        .val-currency { width: 28px; text-align: center; flex-shrink: 0; }
-        .val-amount { flex: 1; text-align: right; padding-right: 12px; white-space: nowrap; }
+
+        .val-label {
+            flex: 2;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+        }
+
+        .val-currency {
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .val-amount {
+            flex: 1;
+            text-align: right;
+            padding-right: 12px;
+            white-space: nowrap;
+        }
+
         /* Rodapé */
         .footer-notes {
             padding: 10px 12px;
@@ -193,6 +269,7 @@
             font-size: 16px;
             border-top: 1px solid #000;
         }
+
         /* Assinatura e data */
         .signature-date {
             display: flex;
@@ -200,13 +277,30 @@
             height: 68px;
             border-top: 1px solid #000;
         }
+
         .signature-box {
             flex: 2;
             position: relative;
             border-right: 1px solid #000;
         }
-        .signature-hint { position: absolute; left: 10px; top: 10px; font-size: 12px; color: #333; }
-        .assinatura-overlay { position: absolute; left: 10px; width: 250px; height: 70px; object-fit: contain; opacity: 1; }
+
+        .signature-hint {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .assinatura-overlay {
+            position: absolute;
+            left: 10px;
+            width: 250px;
+            height: 70px;
+            object-fit: contain;
+            opacity: 1;
+        }
+
         .date-cell {
             flex: 1;
             text-align: center;
@@ -215,8 +309,38 @@
             justify-content: center;
             font-size: 14px;
         }
+
         .excessao {
             border-bottom: none;
+        }
+
+        /* ===== BOTÃO DE GERAR PDF ===== */
+        #gerarPdf {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #gerarPdf:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        @media print {
+            #gerarPdf {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -325,6 +449,27 @@
             <div class="date-cell">{{dataEmissao}}</div>
         </div>
     </div>
+    <button id="gerarPdf" style="margin-bottom: 16px; padding: 8px 14px; font-size: 14px; cursor: pointer;">
+        Gerar PDF
+    </button>
+    <!-- Biblioteca html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        document.getElementById('gerarPdf').addEventListener('click', () => {
+            const voucher = document.querySelector('.voucher-container');
+
+            const opcoes = {
+                margin: 0,
+                filename: 'voucher-hotel.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true },
+                jsPDF: { unit: 'pt', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opcoes).from(voucher).save();
+        });
+    </script>
+
 </body>
 
 </html>
