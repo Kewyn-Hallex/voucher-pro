@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoucherPro - Cadastro de Voucher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Bibliotecas para geração de Word -->
+    <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
+    <script src="https://unpkg.com/docxtemplater@3.44.0/build/docxtemplater.js"></script>
+    
+    <!-- Biblioteca para geração de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'voucher-blue': '#3B82F6',
+                        'voucher-purple': '#8B5CF6',
+                        'voucher-green': '#10B981',
+                        'voucher-yellow': '#F59E0B',
+                        'voucher-red': '#EF4444',
+                        'voucher-gray': '#6B7280',
+                        'voucher-light-gray': '#F3F4F6'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out',
+                        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '70%': { transform: 'scale(0.9)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .button-hover {
+            transition: all 0.2s ease;
+        }
+        .button-hover:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .input-focus:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-field {
+            transition: all 0.3s ease;
+        }
+        .form-field:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-voucher-light-gray min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Back Button -->
+                <div class="flex items-center space-x-4">
+                    <button onclick="window.location.href='../index.html'" class="text-voucher-gray hover:text-voucher-blue transition-colors duration-200">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-voucher-blue rounded-lg flex items-center justify-center">
+                            <i class="fas fa-ticket-alt text-white text-lg"></i>
+                        </div>
+                        <h1 class="text-xl font-bold text-gray-800">VoucherPro</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <section class="text-center mb-8 animate-fade-in">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Cadastro de Voucher</h2>
+            <p class="text-lg text-voucher-gray">
+                Preencha os dados para gerar o voucher de hospedagem
+            </p>
+        </section>
+
+        <!-- Form Section -->
+        <section class="bg-white rounded-xl shadow-md p-8 animate-slide-up">
+            <form id="voucherForm" class="space-y-6">
+                <!-- Guest Name -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user text-voucher-blue"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Nome(s) do Hóspede</label>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="guestName"
+                        placeholder="Digite o nome completo do hóspede" 
+                        class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                        required
+                    >
+                </div>
+
+                <!-- Accommodation Type -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-home text-voucher-green"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Tipo de Acomodação</label>
+                    </div>
+                    <div class="relative">
+                        <select 
+                            id="accommodationType"
+                            class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg appearance-none bg-white"
+                            required
+                        >
+                            <option value="">Selecione o tipo</option>
+                            <option value="single">Quarto Individual</option>
+                            <option value="double">Quarto Duplo</option>
+                            <option value="twin">Quarto Twin</option>
+                            <option value="suite">Suíte</option>
+                            <option value="family">Quarto Familiar</option>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-voucher-gray pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <!-- Observations -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-file-alt text-voucher-yellow"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Observações</label>
+                    </div>
+                    <textarea 
+                        id="observations"
+                        placeholder="Observações adicionais..." 
+                        rows="4"
+                        class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg resize-none"
+                    ></textarea>
+                </div>
+
+                <!-- Check-in Date -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-voucher-green"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Data de Check-in</label>
+                    </div>
+                    <div class="relative">
+                        <input 
+                            type="date" 
+                            id="checkinDate"
+                            class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            required
+                        >
+                        <i class="fas fa-calendar absolute right-4 top-1/2 transform -translate-y-1/2 text-voucher-gray pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <!-- Check-out Date -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calendar-times text-voucher-red"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Data de Check-out</label>
+                    </div>
+                    <div class="relative">
+                        <input 
+                            type="date" 
+                            id="checkoutDate"
+                            class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                            required
+                        >
+                        <i class="fas fa-calendar absolute right-4 top-1/2 transform -translate-y-1/2 text-voucher-gray pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <!-- Daily Rate -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-money-bill-wave text-voucher-green"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Valor da Diária (R$)</label>
+                    </div>
+                    <input 
+                        type="number" 
+                        id="dailyRate"
+                        step="0.01"
+                        min="0"
+                        placeholder="0,00" 
+                        class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                        required
+                    >
+                </div>
+
+                <!-- Advance Payment -->
+                <div class="form-field">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-hand-holding-usd text-voucher-blue"></i>
+                        </div>
+                        <label class="text-lg font-semibold text-gray-800">Valor Antecipado (R$)</label>
+                    </div>
+                    <input 
+                        type="number" 
+                        id="advancePayment"
+                        step="0.01"
+                        min="0"
+                        placeholder="0,00" 
+                        class="w-full px-4 py-4 border border-gray-300 rounded-xl input-focus transition-all duration-200 text-lg"
+                    >
+                </div>
+            </form>
+        </section>
+
+        <!-- Automatic Calculations Section -->
+        <section class="bg-white rounded-xl shadow-md p-8 mt-8 animate-slide-up" style="animation-delay: 0.2s">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-calculator text-voucher-purple"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">Cálculos Automáticos</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Number of Nights -->
+                <div class="text-center p-6 bg-gray-50 rounded-xl">
+                    <p class="text-sm text-voucher-gray mb-2">Quantidade de Diárias</p>
+                    <p id="numberOfNights" class="text-3xl font-bold text-gray-800">0</p>
+                </div>
+                
+                <!-- Total Value -->
+                <div class="text-center p-6 bg-blue-50 rounded-xl">
+                    <p class="text-sm text-voucher-gray mb-2">Valor Total</p>
+                    <p id="totalValue" class="text-3xl font-bold text-voucher-blue">R$ 0,00</p>
+                </div>
+                
+                <!-- Remaining Value -->
+                <div class="text-center p-6 bg-green-50 rounded-xl">
+                    <p class="text-sm text-voucher-gray mb-2">Valor Restante</p>
+                    <p id="remainingValue" class="text-3xl font-bold text-voucher-green">R$ 0,00</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Confirm Button -->
+        <div class="text-center mt-8 animate-bounce-in" style="animation-delay: 0.4s">
+            <button 
+                id="confirmButton"
+                class="gradient-bg text-white px-12 py-4 rounded-xl font-semibold text-xl button-hover transition-all duration-200"
+            >
+                <i class="fas fa-check mr-3"></i>
+                Confirmar Voucher
+            </button>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-bounce-in">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-voucher-green text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Voucher Criado!</h3>
+                <p class="text-voucher-gray mb-6">O voucher foi gerado em PDF e baixado automaticamente.</p>
+                <div class="flex space-x-4">
+                    <button 
+                        id="backToDashboard"
+                        class="flex-1 bg-voucher-blue text-white py-3 rounded-xl font-medium button-hover transition-all duration-200"
+                    >
+                        Voltar ao Dashboard
+                    </button>
+                    <button 
+                        id="createAnother"
+                        class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium button-hover transition-all duration-200"
+                    >
+                        Criar Outro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Script básico para funcionalidades da interface
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form elements
+            const form = document.getElementById('voucherForm');
+            const checkinDate = document.getElementById('checkinDate');
+            const checkoutDate = document.getElementById('checkoutDate');
+            const dailyRate = document.getElementById('dailyRate');
+            const advancePayment = document.getElementById('advancePayment');
+            const successModal = document.getElementById('successModal');
+
+            // Calculation elements
+            const numberOfNights = document.getElementById('numberOfNights');
+            const totalValue = document.getElementById('totalValue');
+            const remainingValue = document.getElementById('remainingValue');
+
+            // Format currency
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                }).format(value);
+            }
+
+            // Calculate number of nights
+            function calculateNights() {
+                if (checkinDate.value && checkoutDate.value) {
+                    const checkin = new Date(checkinDate.value);
+                    const checkout = new Date(checkoutDate.value);
+                    const diffTime = Math.abs(checkout - checkin);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays > 0 ? diffDays : 0;
+                }
+                return 0;
+            }
+
+            // Calculate total value
+            function calculateTotal() {
+                const nights = calculateNights();
+                const rate = parseFloat(dailyRate.value) || 0;
+                return nights * rate;
+            }
+
+            // Calculate remaining value
+            function calculateRemaining() {
+                const total = calculateTotal();
+                const advance = parseFloat(advancePayment.value) || 0;
+                return Math.max(0, total - advance);
+            }
+
+            // Update calculations
+            function updateCalculations() {
+                const nights = calculateNights();
+                const total = calculateTotal();
+                const remaining = calculateRemaining();
+
+                numberOfNights.textContent = nights;
+                totalValue.textContent = formatCurrency(total);
+                remainingValue.textContent = formatCurrency(remaining);
+
+                // Add animation to updated values
+                [numberOfNights, totalValue, remainingValue].forEach(element => {
+                    element.style.animation = 'bounceIn 0.6s ease-out';
+                    setTimeout(() => {
+                        element.style.animation = '';
+                    }, 600);
+                });
+            }
+
+            // Event listeners for calculations
+            [checkinDate, checkoutDate, dailyRate, advancePayment].forEach(input => {
+                input.addEventListener('input', updateCalculations);
+                input.addEventListener('change', updateCalculations);
+            });
+
+            // Date validation
+            function validateDates() {
+                if (checkinDate.value && checkoutDate.value) {
+                    const checkin = new Date(checkinDate.value);
+                    const checkout = new Date(checkoutDate.value);
+                    
+                    if (checkout <= checkin) {
+                        checkoutDate.setCustomValidity('A data de check-out deve ser posterior à data de check-in');
+                        return false;
+                    } else {
+                        checkoutDate.setCustomValidity('');
+                        return true;
+                    }
+                }
+                return true;
+            }
+
+            checkinDate.addEventListener('change', () => {
+                if (checkinDate.value) {
+                    const minDate = new Date(checkinDate.value);
+                    minDate.setDate(minDate.getDate() + 1);
+                    checkoutDate.min = minDate.toISOString().split('T')[0];
+                }
+                validateDates();
+            });
+
+            checkoutDate.addEventListener('change', validateDates);
+
+            // Modal actions
+            document.getElementById('backToDashboard').addEventListener('click', () => {
+                window.location.href = '../index.html';
+            });
+
+            document.getElementById('createAnother').addEventListener('click', () => {
+                successModal.classList.add('hidden');
+                successModal.classList.remove('flex');
+                form.reset();
+                updateCalculations();
+            });
+
+            // Close modal when clicking outside
+            successModal.addEventListener('click', (e) => {
+                if (e.target === successModal) {
+                    successModal.classList.add('hidden');
+                    successModal.classList.remove('flex');
+                }
+            });
+
+            // Input formatting for currency
+            [dailyRate, advancePayment].forEach(input => {
+                input.addEventListener('blur', () => {
+                    if (input.value) {
+                        const value = parseFloat(input.value);
+                        if (!isNaN(value)) {
+                            input.value = value.toFixed(2);
+                        }
+                    }
+                });
+            });
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            checkinDate.min = today;
+
+            // Initialize calculations
+            updateCalculations();
+
+            // Add loading animation on page load
+            document.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-bounce-in').forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Form field animations on focus
+            document.querySelectorAll('.form-field input, .form-field select, .form-field textarea').forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.parentElement.style.transform = 'translateY(-2px)';
+                    input.parentElement.parentElement.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1)';
+                });
+
+                input.addEventListener('blur', () => {
+                    input.parentElement.parentElement.style.transform = 'translateY(0)';
+                    input.parentElement.parentElement.style.boxShadow = '';
+                });
+            });
+        });
+    </script>
+    <script src="../assets/scripts/pdf_generator.js"></script>
+    <script src="../assets/scripts/create_voucher.js"></script>
+</body>
+</html>

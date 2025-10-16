@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoucherPro - Dashboard de Vouchers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'voucher-blue': '#3B82F6',
+                        'voucher-purple': '#8B5CF6',
+                        'voucher-green': '#10B981',
+                        'voucher-yellow': '#F59E0B',
+                        'voucher-red': '#EF4444',
+                        'voucher-gray': '#6B7280',
+                        'voucher-light-gray': '#F3F4F6'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out',
+                        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '70%': { transform: 'scale(0.9)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .button-hover {
+            transition: all 0.2s ease;
+        }
+        .button-hover:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .input-focus:focus {
+            outline: none;
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-voucher-light-gray min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 animate-fade-in">
+                    <div class="w-10 h-10 bg-voucher-blue rounded-lg flex items-center justify-center">
+                        <i class="fas fa-ticket-alt text-white text-lg"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-800">VoucherPro</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <section class="text-center mb-8 animate-slide-up">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Dashboard de Vouchers</h2>
+            <p class="text-lg text-voucher-gray mb-8 max-w-2xl mx-auto">
+                Gerencie seus vouchers de hospedagem de forma simples e eficiente
+            </p>
+            <button onclick="window.location.href='pages/create_voucher.html'" class="gradient-bg text-white px-8 py-4 rounded-xl font-semibold text-lg button-hover animate-bounce-in">
+                <i class="fas fa-plus mr-2"></i>
+                Criar Novo Voucher
+            </button>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="bg-white rounded-xl shadow-md p-6 mb-8 animate-slide-up">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Search -->
+                <div class="lg:col-span-2">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-voucher-gray"></i>
+                        <input 
+                            type="text" 
+                            placeholder="Buscar por nome do hóspede..." 
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200"
+                        >
+                    </div>
+                </div>
+                
+                <!-- Start Date -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Data Inicial</label>
+                    <div class="relative">
+                        <input 
+                            type="date" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200"
+                        >
+                        <i class="fas fa-calendar absolute right-3 top-1/2 transform -translate-y-1/2 text-voucher-gray"></i>
+                    </div>
+                </div>
+                
+                <!-- End Date -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Data Final</label>
+                    <div class="relative">
+                        <input 
+                            type="date" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200"
+                        >
+                        <i class="fas fa-calendar absolute right-3 top-1/2 transform -translate-y-1/2 text-voucher-gray"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <button class="bg-gray-100 text-gray-700 px-6 py-2 rounded-xl font-medium button-hover transition-all duration-200">
+                    <i class="fas fa-filter mr-2"></i>
+                    Filtrar
+                </button>
+            </div>
+        </section>
+
+        <!-- Recent Vouchers Section -->
+        <section class="animate-slide-up">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Vouchers Recentes</h3>
+                <span class="text-voucher-gray">3 vouchers</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Voucher Card 1 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.1s">
+                    <div class="flex items-start space-x-4 mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-voucher-blue"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Maria Silva</h4>
+                            <p class="text-sm text-voucher-gray">Voucher #1</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-sm text-voucher-gray">Check-in:</p>
+                            <p class="font-bold text-gray-800">14/01/2024</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-voucher-gray">Check-out:</p>
+                            <p class="font-bold text-gray-800">19/01/2024</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <p class="text-sm text-voucher-gray">Valor Total:</p>
+                            <p class="font-bold text-voucher-green">R$ 850.00</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-voucher-gray">Status:</p>
+                            <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                Pago
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-blue-50 text-voucher-blue py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="flex-1 bg-green-50 text-voucher-green py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="flex-1 bg-red-50 text-voucher-red py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Voucher Card 2 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.2s">
+                    <div class="flex items-start space-x-4 mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-voucher-blue"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">João Santos</h4>
+                            <p class="text-sm text-voucher-gray">Voucher #2</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-sm text-voucher-gray">Check-in:</p>
+                            <p class="font-bold text-gray-800">20/01/2024</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-voucher-gray">Check-out:</p>
+                            <p class="font-bold text-gray-800">25/01/2024</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <p class="text-sm text-voucher-gray">Valor Total:</p>
+                            <p class="font-bold text-voucher-green">R$ 1.200.00</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-voucher-gray">Status:</p>
+                            <span class="inline-block bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                                Pendente
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-blue-50 text-voucher-blue py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="flex-1 bg-green-50 text-voucher-green py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="flex-1 bg-red-50 text-voucher-red py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Voucher Card 3 -->
+                <div class="bg-white rounded-xl shadow-md p-6 card-hover animate-fade-in" style="animation-delay: 0.3s">
+                    <div class="flex items-start space-x-4 mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-voucher-blue"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800">Ana Costa</h4>
+                            <p class="text-sm text-voucher-gray">Voucher #3</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <p class="text-sm text-voucher-gray">Check-in:</p>
+                            <p class="font-bold text-gray-800">28/01/2024</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-voucher-gray">Check-out:</p>
+                            <p class="font-bold text-gray-800">02/02/2024</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <p class="text-sm text-voucher-gray">Valor Total:</p>
+                            <p class="font-bold text-voucher-green">R$ 950.00</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-voucher-gray">Status:</p>
+                            <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                                Pago
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button class="flex-1 bg-blue-50 text-voucher-blue py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="flex-1 bg-green-50 text-voucher-green py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="flex-1 bg-red-50 text-voucher-red py-2 px-3 rounded-lg button-hover transition-all duration-200">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Create Voucher -->
+    <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 animate-bounce-in">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800">Criar Novo Voucher</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Hóspede</label>
+                    <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200" placeholder="Digite o nome completo">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Check-in</label>
+                        <input type="date" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Check-out</label>
+                        <input type="date" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Valor Total</label>
+                    <input type="number" step="0.01" class="w-full px-4 py-3 border border-gray-300 rounded-xl input-focus transition-all duration-200" placeholder="0.00">
+                </div>
+                
+                <div class="flex space-x-4 pt-4">
+                    <button type="button" id="cancelCreate" class="flex-1 bg-gray-100 text-gray-700 py-3 rounded-xl font-medium button-hover transition-all duration-200">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 gradient-bg text-white py-3 rounded-xl font-medium button-hover transition-all duration-200">
+                        Criar Voucher
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const createButton = document.querySelector('.gradient-bg');
+        const modal = document.getElementById('createModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelCreate = document.getElementById('cancelCreate');
+
+        // Removed modal functionality since we're redirecting to a new page
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        cancelCreate.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        });
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('input[placeholder*="Buscar"]');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.card-hover');
+            
+            cards.forEach(card => {
+                const guestName = card.querySelector('h4').textContent.toLowerCase();
+                if (guestName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.3s ease-in-out';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter functionality
+        const filterButton = document.querySelector('button:has(.fa-filter)');
+        filterButton.addEventListener('click', () => {
+            // Add loading state
+            filterButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Filtrando...';
+            filterButton.disabled = true;
+            
+            // Simulate filter process
+            setTimeout(() => {
+                filterButton.innerHTML = '<i class="fas fa-filter mr-2"></i>Filtrar';
+                filterButton.disabled = false;
+                
+                // Add success feedback
+                filterButton.classList.add('bg-green-100', 'text-green-800');
+                setTimeout(() => {
+                    filterButton.classList.remove('bg-green-100', 'text-green-800');
+                }, 2000);
+            }, 1500);
+        });
+
+        // Card action buttons
+        document.querySelectorAll('.card-hover').forEach(card => {
+            const viewBtn = card.querySelector('.bg-blue-50');
+            const downloadBtn = card.querySelector('.bg-green-50');
+            const deleteBtn = card.querySelector('.bg-red-50');
+            
+            viewBtn.addEventListener('click', () => {
+                viewBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                setTimeout(() => {
+                    viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
+                    // Show success message
+                    showNotification('Voucher visualizado com sucesso!', 'success');
+                }, 1000);
+            });
+            
+            downloadBtn.addEventListener('click', () => {
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                setTimeout(() => {
+                    downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+                    showNotification('Download iniciado!', 'success');
+                }, 1000);
+            });
+            
+            deleteBtn.addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja excluir este voucher?')) {
+                    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    setTimeout(() => {
+                        card.style.animation = 'slideUp 0.3s ease-out reverse';
+                        setTimeout(() => {
+                            card.remove();
+                            showNotification('Voucher excluído com sucesso!', 'success');
+                        }, 300);
+                    }, 1000);
+                }
+            });
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 p-4 rounded-xl shadow-lg z-50 animate-slide-up ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideUp 0.3s ease-out reverse';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Criando...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Voucher Criado!';
+                submitBtn.classList.add('bg-green-500');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    showNotification('Voucher criado com sucesso!', 'success');
+                    
+                    // Reset form
+                    e.target.reset();
+                    submitBtn.innerHTML = 'Criar Voucher';
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('bg-green-500');
+                }, 1500);
+            }, 2000);
+        });
+
+        // Add loading animation on page load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.animate-fade-in').forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Voucher Hotel Porto da Lua</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 16px;
+            background: #fff;
+            color: #000;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+        .voucher-container {
+            width: 746px;
+            border: 1px solid #000;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .voucher-row {
+            display: flex;
+            width: 100%;
+            border-bottom: 1px solid #000;
+        }
+        .voucher-cell {
+            border-right: 1px solid #000;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .voucher-cell:last-child { border-right: none; }
+        /* Header */
+        .header {
+            display: flex;
+            width: 100%;
+            height: 106px;
+            border-bottom: 1px solid #000;
+        }
+        .header-logo {
+            width: 146px;
+            text-align: center;
+            position: relative;
+            border-right: 1px solid #000;
+        }
+        .header-logo-placeholder {
+            width: 100px;
+            height: 90px;
+            margin: 8px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        .header-logo img {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 90px;
+            object-fit: contain;
+            opacity: 1;
+        }
+        .header-info {
+            flex: 1;
+            text-align: center;
+            padding: 8px 9px 0 9px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .hotel-name { font-weight: 800; text-transform: uppercase; font-size: 20px; margin: 0; }
+        .hotel-address { font-size: 14px; margin-top: 6px; }
+        /* Título do voucher */
+        .voucher-title { 
+            height: 50px;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+            padding-top: 6px;
+            border-bottom: 1px solid #000;
+        }
+        /* Check-in / Check-out */
+        .main-info {
+            display: flex;
+            width: 100%;
+            height: 60px;
+            border-bottom: 1px solid #000;
+        }
+        .main-info .label-cell {
+            width: 146px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #000;
+        }
+        .main-info .label-cell1{
+            width: 130px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #000;
+        }
+        .main-info .info-cell {
+            flex: 1;
+            display: flex;
+            padding: 0;
+        }
+        .split-left {
+            border-right: 1px solid #000;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px;
+        }
+        .split-right {
+            flex: 2;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+        }
+        .col-2-label {
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            padding-left: 9px;
+        }
+        .value-cell {
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            white-space: nowrap;
+        }
+        /* Hóspedes */
+        .hospedes {
+            display: flex;
+            align-items: center;
+            height: 4.5rem;
+            padding: 4px 8px;
+        }
+        .hospedes .label-cell { font-weight: 700; text-transform: uppercase; margin-right: 12px; }
+        /* Pagamento */
+        .payment-title {
+            height: 32px;
+            text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding-top: 6px;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+        .payment-section {
+            display: flex;
+            width: 100%;
+        }
+        .policy-cell {
+            width: 50%;
+            padding: 10px 14px 12px 14px;
+        }
+        .policy-cell strong { display: inline-block; margin-bottom: 6px; }
+        .policy-cell ul { margin: 8px 0 0 0; padding-left: 18px; }
+        .policy-cell li { margin: 7px 0; }
+        .values-table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+        .values-table-row {
+            display: flex;
+            border-bottom: 1px solid #000;
+            border-left: 1px solid #000;
+            height: 36px;
+        }
+        .val-label { flex: 2; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; padding-left: 12px; }
+        .val-currency { width: 28px; text-align: center; flex-shrink: 0; }
+        .val-amount { flex: 1; text-align: right; padding-right: 12px; white-space: nowrap; }
+        /* Rodapé */
+        .footer-notes {
+            padding: 10px 12px;
+            font-weight: 800;
+            line-height: 1.5;
+            height: 84px;
+            font-size: 16px;
+            border-top: 1px solid #000;
+        }
+        /* Assinatura e data */
+        .signature-date {
+            display: flex;
+            width: 100%;
+            height: 68px;
+            border-top: 1px solid #000;
+        }
+        .signature-box {
+            flex: 2;
+            position: relative;
+            border-right: 1px solid #000;
+        }
+        .signature-hint { position: absolute; left: 10px; top: 10px; font-size: 12px; color: #333; }
+        .assinatura-overlay { position: absolute; left: 10px; width: 250px; height: 70px; object-fit: contain; opacity: 1; }
+        .date-cell {
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .excessao {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="voucher-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">
+                <div class="header-logo-placeholder"></div>
+                <img src="../img/logo.png" alt="Logo Hotel Porto da Lua" class="logo-overlay">
+            </div>
+            <div class="header-info">
+                <div class="hotel-name">HOTEL PORTO DA LUA - MARUDÁ</div>
+                <div class="hotel-address">Av. Beira Mar – Alegre – Marudá</div>
+                <div class="hotel-address">Marapanim – Pará – Brasil</div>
+                <div class="hotel-address">Fone: (91) 9 9369-1074</div>
+            </div>
+        </div>
+
+        <!-- Título do voucher -->
+        <div class="voucher-title">VOUCHER- QUARTO X</div>
+
+        <!-- Check-in -->
+        <div class="main-info">
+            <div class="label-cell1">CHECK IN</div>
+            <div class="info-cell">
+                <div class="split-left">{{checkin}}</div>
+                <div class="split-right">
+                    <div class="col-2-label">TIPO DE ACOMODAÇÃO:</div>
+                    <div class="value-cell">{{tipoAcomodacao}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Check-out -->
+        <div class="main-info">
+            <div class="label-cell1">CHECK OUT</div>
+            <div class="info-cell">
+                <div class="split-left">{{checkout}}</div>
+                <div class="split-right">
+                    <div class="col-2-label">OBSERVAÇÃO:</div>
+                    <div class="value-cell">{{observacoes}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hóspedes -->
+        <div class="hospedes">
+            <div class="label-cell">HÓSPEDES:</div>
+            <div class="value-cell">{{nome}}</div>
+        </div>
+
+        <!-- Pagamento -->
+        <div class="payment-title">DADOS DO PAGAMENTO</div>
+        <div class="payment-section">
+            <div class="policy-cell">
+                <strong>Política de Cancelamento</strong>
+                <ul style="list-style-type: none;">
+                    <li>- 14 Dias antes: Reembolso Integral</li>
+                    <li>- 7 dias antes: Crédito em diárias</li>
+                    <li>- 48h: No Show Integral sem reembolso ou crédito</li>
+                </ul>
+            </div>
+            <div class="values-table">
+                <div class="values-table-row">
+                    <div class="val-label">VALOR DA DIÁRIA</div>
+                    <div class="val-currency">R$</div>
+                    <div class="val-amount">{{valorDiaria}}</div>
+                </div>
+                <div class="values-table-row">
+                    <div class="val-label">QUANTIDADE DE DIÁRIAS</div>
+                    <div class="val-currency"></div>
+                    <div class="val-amount">{{quantidadeDiarias}}</div>
+                </div>
+                <div class="values-table-row">
+                    <div class="val-label">VALOR TOTAL</div>
+                    <div class="val-currency">R$</div>
+                    <div class="val-amount">{{total}}</div>
+                </div>
+                <div class="values-table-row">
+                    <div class="val-label">VALOR ANTECIPADO</div>
+                    <div class="val-currency">R$</div>
+                    <div class="val-amount">{{valorAntecipado}}</div>
+                </div>
+                <div class="values-table-row excessao">
+                    <div class="val-label">VALOR A PAGAR</div>
+                    <div class="val-currency">R$</div>
+                    <div class="val-amount">{{restante}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Observações -->
+        <div class="footer-notes">
+            OBS.: DIÁRIA INICIA AS 12:00 DA DATA DE ENTRADA E ENCERRA AS 12:00 DA DATA DE SAÍDA.<br>
+            O HÓSPEDE DEVERÁ QUITAR O DÉBITO NO <strong>CHECK IN</strong>.
+        </div>
+
+        <!-- Assinatura e data -->
+        <div class="signature-date">
+            <div class="signature-box">
+                <div class="signature-hint"></div>
+                <img src="../img/assinatura.jfif" alt="Assinatura" class="assinatura-overlay">
+            </div>
+            <div class="date-cell">{{dataEmissao}}</div>
+        </div>
+    </div>
+</body>
+
+</html>
